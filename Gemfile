@@ -12,6 +12,7 @@ gem 'bootsnap',   '1.4.6', require: false
 group :development, :test do
   gem 'sqlite3', '1.4.2'
   gem 'byebug',  '11.1.3', platforms: [:mri, :mingw, :x64_mingw]
+
 end
 
 group :development do
@@ -25,6 +26,8 @@ group :test do
   gem 'capybara',           '3.32.2'
   gem 'selenium-webdriver', '3.142.7'
   gem 'webdrivers',         '4.3.0'
+  gem 'minitest'
+  gem 'minitest-reporters'
 end
 
 group :production do
