@@ -28,6 +28,9 @@ group :test do
   gem 'webdrivers',         '4.3.0'
   gem 'minitest'
   gem 'minitest-reporters'
+  gem 'mini_backtrace'
+  gem 'guard'
+  gem 'guard-minitest'
 end
 
 group :production do
