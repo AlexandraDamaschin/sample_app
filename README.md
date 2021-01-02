@@ -39,5 +39,8 @@ If the test suite passes, you'll be ready to run the app in a local server:
 $ rails server
 ```
 
+App deployed to heroku:
+https://mysterious-savannah-80309.herokuapp.com/
+
 For more information, see the
 [*Ruby on Rails Tutorial* book](https://www.railstutorial.org/book).
