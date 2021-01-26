@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 class PasswordResetsTest < ActionDispatch::IntegrationTest
@@ -15,7 +16,6 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     post password_resets_path, params: { password_reset: { email: '' } }
     assert_not flash.empty?
     assert_template 'password_resets/new'
-
   end
 
   test 'password resets with valid email' do
@@ -70,5 +70,20 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     assert is_logged_in?
     assert_not flash.empty?
     assert_redirected_to user
+  end
+
+  test 'expired token' do
+    get new_password_reset_path
+    post password_resets_path,
+         params: { password_reset: { email: @user.email } }
+
+    @user = assigns(:user)
+    @user.update_attribute(:reset_send_at, 3.hours.ago)
+    patch password_reset_path(@user.reset_token),
+          params: { email: @user.email,
+                    user: { password: 'foo bar', password_confirmation: 'foobar' } }
+    assert_response :redirect
+    follow_redirect!
+    assert_match /expired/i, response.body
   end
 end
