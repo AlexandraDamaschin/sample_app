@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class User < ApplicationRecord
   has_many :microposts, dependent: :destroy
   attr_accessor :remember_token, :activation_token, :reset_token
@@ -13,12 +14,12 @@ class User < ApplicationRecord
             uniqueness: { case_sensitive: false }
   has_secure_password
 
-  def User.digest(string)
+  def self.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
     BCrypt::Password.create(string, cost: cost)
   end
 
-  def User.new_token
+  def self.new_token
     SecureRandom.urlsafe_base64
   end
 
@@ -63,6 +64,10 @@ class User < ApplicationRecord
 
   def password_reset_expired?
     reset_send_at < 2.hours.ago
+  end
+
+  def feed
+    Micropost.where('user_id = ?', id)
   end
 
   private
