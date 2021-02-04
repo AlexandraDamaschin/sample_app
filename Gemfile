@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gem 'bcrypt', '3.1.13'
+gem 'active_storage_validations', '0.8.9'
 gem 'faker', '2.11.0'
 gem 'bootsnap', '1.4.6', require: false
 gem 'bootstrap-sass', '3.4.1'
