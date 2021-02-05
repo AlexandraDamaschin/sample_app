@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
@@ -74,6 +75,46 @@ class UserTest < ActiveSupport::TestCase
     @user.microposts.create!(content: 'Content')
     assert_difference 'Micropost.count', -1 do
       @user.destroy
+    end
+  end
+
+  test 'should follow and unfollow a user' do
+    alexandra = users(:alexandra)
+    archer = users(:archer)
+    assert_not alexandra.following?(archer)
+
+    alexandra.follow(archer)
+    assert alexandra.following?(archer)
+    assert archer.followers.include?(alexandra)
+
+    alexandra.unfollow(archer)
+    assert_not alexandra.following?(archer)
+
+    # Users can't follow themselves.
+    alexandra.follow(alexandra)
+    assert_not alexandra.following?(alexandra)
+  end
+
+  test 'feed should have the right posts' do
+    alexandra = users(:alexandra)
+    archer = users(:archer)
+    lana = users(:lana)
+    # Posts from followed user
+    lana.microposts.each do |post_following|
+      assert alexandra.feed.include?(post_following)
+    end
+
+    alexandra.microposts.each do |post_self|
+      assert alexandra.feed.include?(post_self)
+      assert_equal alexandra.feed.distinct, alexandra.feed
+    end
+
+    archer.microposts.each do |post_self|
+      assert archer.feed.include?(post_self)
+    end
+
+    archer.microposts.each do |post_unfollowed|
+      assert_not alexandra.feed.include?(post_unfollowed)
     end
   end
 end
