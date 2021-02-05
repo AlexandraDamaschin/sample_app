@@ -96,16 +96,17 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'feed should have the right posts' do
-    michael = users(:alexandra)
+    alexandra = users(:alexandra)
     archer = users(:archer)
     lana = users(:lana)
-
+    # Posts from followed user
     lana.microposts.each do |post_following|
-      assert michael.feed.include?(post_following)
+      assert alexandra.feed.include?(post_following)
     end
 
-    michael.microposts.each do |post_self|
-      assert michael.feed.include?(post_self)
+    alexandra.microposts.each do |post_self|
+      assert alexandra.feed.include?(post_self)
+      assert_equal alexandra.feed.distinct, alexandra.feed
     end
 
     archer.microposts.each do |post_self|
@@ -113,7 +114,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
     archer.microposts.each do |post_unfollowed|
-      assert_not michael.feed.include?(post_unfollowed)
+      assert_not alexandra.feed.include?(post_unfollowed)
     end
   end
 end
